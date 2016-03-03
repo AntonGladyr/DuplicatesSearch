@@ -1,13 +1,10 @@
-	#!/usr/bin/php
+#!/usr/bin/php
 <?php
 
 	function compare($path1, $path2)
 	{
-
-		if (filesize($file_a, $file_b))
-		{
-			$fp_a = fopen($file_a, 'rb');
-			$fp_b = fopen($file_b, 'rb');
+			$fp_a = fopen($path1, 'rb');
+			$fp_b = fopen($path2, 'rb');
 			
 			while (($b = fread($fp_a, 4096)) !== false)
 			{
@@ -19,28 +16,37 @@
 					return false;
 				}
 			}
-
 			
 			fclose($fp_a);
-			fclsoe($fp_b);
+			fclose($fp_b);
 			return true;
-		}
-		
-		return false;
 	}
 
 
 
 
+	$start_time = microtime($get_as_float=true);
+	$path = $argv[1];  //path to directory
 
-	$path = $argv[1];
+	//$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
+	$Iterator = new RecursiveIteratorIterator(
+		new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS));
 
 
-	$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
-	foreach ($Iterator as $dir)
+	$MyDictionary = array();
+
+	foreach ($Iterator as $file)
 	{
-		echo "$dir\n";
+		//$filesize = $file->getSize();  //filesize($file)
+		
+		if (in_array(filesize($file), array_keys($MyDictionary))) //Check filesize in dict keys
+		{
+			array_push($MyDictionary[filesize($file)], [$file]);
+		}
+		else  //If filesize not in dict keys
+		{
+			$MyDictionary[filesize($file)] = [[$file]];  //Add new key groups
+		}
 	}
-
-
+	print_r($MyDictionary);
 ?>
