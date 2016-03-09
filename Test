@@ -63,10 +63,11 @@
 		foreach ($groups as $group) {
 			if (count($group) > 1) {
 				$count++;
-				echo "Group $count: \n";
+				echo "File size: $size \n";
 				foreach ($group as $file) {
 					echo "\t$file\n";
 				} 
+				echo "\n";
 			}
 		}
 	}
