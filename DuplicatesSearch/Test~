@@ -1,0 +1,46 @@
+#!/usr/bin/php
+<?php
+
+	function compare($path1, $path2)
+	{
+
+		if (filesize($file_a, $file_b))
+		{
+			$fp_a = fopen($file_a, 'rb');
+			$fp_b = fopen($file_b, 'rb');
+			
+			while (($b = fread($fp_a, 4096)) !== false)
+			{
+				$b_b = fread($fp_b, 4096);
+				if ($b !== $b_b)
+				{
+					fclose($fp_a);
+					fclose($fp_b);
+					return false;
+				}
+			}
+
+			
+			fclose($fp_a);
+			fclsoe($fp_b);
+			return true;
+		}
+		
+		return false;
+	}
+
+
+
+
+
+	$path = $argv[1];
+
+
+	$Iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
+	foreach ($Iterator as $dir)
+	{
+		echo "$dir\n";
+	}
+
+
+?>
