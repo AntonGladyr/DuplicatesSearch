@@ -1,13 +1,18 @@
 <?php
 include "Comparator.php";
+include "Processing/Processing.php";
 
 class DuplicateSearcher
 {
-	private $MyDictionary = array();
+	private $myDictionary = array();
 
-	private $FolderPath; 
+	private $linksDictionary = array();
 
-	private $Comparator;
+	private $folderPath;
+
+	private $comparator;
+
+	private $processing;
 
 	private $counter;
 
@@ -15,44 +20,51 @@ class DuplicateSearcher
 
 	function __construct($path)
 	{
-		$this->FolderPath = $path;
-		$this->Comparator = new Comparator();
+		$this->folderPath = $path;
+		$this->comparator = new Comparator();
+		$this->processing = new Processing();
 	}
 
 
 	function searchDuplicates()
 	{
-		$Iterator = new RecursiveIteratorIterator(
-		new RecursiveDirectoryIterator($this->FolderPath, RecursiveDirectoryIterator::SKIP_DOTS));
+		$totalSize = 0;
+		$iterator = new RecursiveIteratorIterator(
+			new RecursiveDirectoryIterator($this->folderPath, RecursiveDirectoryIterator::SKIP_DOTS));
 		// Without dots 
 		// . - current folder
 		// .. - previous folder
 
-		foreach ($Iterator as $file)
-		{		
-			if (in_array(filesize($file), array_keys($this->MyDictionary))) { // Check filesize in dict keys
-				$added = false;	// flag
-				foreach ($this->MyDictionary[filesize($file)] as $index => $group) { // Iterate groups with index
-					if ($this->Comparator->Compare($file, $group[0])) { // Compare first file of group and current file
-						$added = true;	// flag = true if added in group
-						array_push($this->MyDictionary[filesize($file)][$index], $file);
-						break;
+		foreach ($iterator as $file) {
+
+			if (is_link($file))
+				array_push($this->linksDictionary, $file);
+			else {
+				if (in_array(filesize($file), array_keys($this->myDictionary))) { // Check filesize in dict keys
+					$added = false;    // flag
+					foreach ($this->myDictionary[filesize($file)] as $index => $group) { // Iterate groups with index
+						if ($this->comparator->Compare($file, $group[0])) { // Compare first file of group and current file
+							$added = true;    // flag = true if added in group
+							array_push($this->myDictionary[filesize($file)][$index], $file);
+							break;
+						}
 					}
-				}
-				if (!$added) {	// If not added, add new group
-					array_push($this->MyDictionary[filesize($file)], [$file]);
+					if (!$added) {    // If not added, add new group
+						array_push($this->myDictionary[filesize($file)], [$file]);
+					}
+				} else { // If filesize not in dict keys
+					$this->myDictionary[filesize($file)] = [[$file]]; // Add new filesize => groups
 				}
 			}
-			else { // If filesize not in dict keys
-				$this->MyDictionary[filesize($file)] = [[$file]]; // Add new filesize => groups
-			}
+
+			$this->processing->show_status($totalSize += filesize($file), disk_total_space($this->folderPath)/4096);
 		}
 	}
 
 	function getFilteredResult()
 	{
 		$result = array();
-		foreach ($this->MyDictionary as $size => $groups) {
+		foreach ($this->myDictionary as $size => $groups) {
 			foreach ($groups as $group) {
 				if (count($group) > 1) {
 					$this->counter++;
@@ -70,7 +82,12 @@ class DuplicateSearcher
 
 	function getUnfilteredResult()
 	{
-		return $this->MyDictionary;
+		return $this->myDictionary;
+	}
+
+	function getLinks()
+	{
+		return $this->linksDictionary;
 	}
 }
 ?>

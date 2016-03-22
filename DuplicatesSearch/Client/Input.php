@@ -2,16 +2,18 @@
 
 class Input
 {
-	private $Path;
+	private $path;
 
 	function setPath($path)
 	{
-			$this->Path = $path;
+		if (empty($path))
+			$this->path = "./";
+		else $this->path = $path;
 	}
 
 	function getPath()
 	{
-		return $this->Path;
+		return $this->path;
 	}
 
 }
