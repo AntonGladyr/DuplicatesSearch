@@ -1,5 +1,7 @@
 <?php
 
+define("BUFFER", 4096); //BUFFER
+
 class Comparator
 {
 	public function Compare($path1, $path2)  // Compare file by bytes
@@ -7,9 +9,9 @@ class Comparator
 			$file1 = fopen($path1, 'rb');
 			$file2 = fopen($path2, 'rb');
 			
-			while (($f1_bytes = fread($file1, 4096)) != false)
+			while (($f1_bytes = fread($file1, BUFFER)) != false)
 			{
-				$f2_bytes = fread($file2, 4096);
+				$f2_bytes = fread($file2, BUFFER);
 				if ($f1_bytes !== $f2_bytes)
 				{
 					fclose($file1);
