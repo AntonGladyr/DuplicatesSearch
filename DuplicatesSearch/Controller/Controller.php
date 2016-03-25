@@ -1,6 +1,4 @@
 <?php
-include "../BusinessLogic/DuplicateSearcher.php";
-include  "../Client/Client.php";
 
 class Controller
 {
@@ -11,13 +9,29 @@ class Controller
     function __construct($path)
     {
         $this->client = new Client($path);
-        $this->duplicateSearcher = new DuplicateSearcher($path);
-        $this->delegate();
+        $this->duplicateSearcher = new DuplicateSearcher();
     }
 
-    private function delegate()
+    public function Start()
     {
-        $this->duplicateSearcher->searchDuplicates();
+        $start_time = microtime($get_as_float=true);
+
+        $path = $this->client->getPath();
+
+        if (!is_null($path))
+        {
+            $this->duplicateSearcher->searchDuplicates($path);
+
+            $this->client->displayFilteredResult($this->duplicateSearcher->getFilteredResult());
+
+            $this->client->displayLinks($this->duplicateSearcher->getLinks());
+
+            $this->client->displayAmountOfGroups($this->duplicateSearcher->getAmountOfGroups());
+
+            $time = microtime($get_as_float=true) - $start_time;
+
+            $this->client->displayTime($time);
+        }
     }
 }
 

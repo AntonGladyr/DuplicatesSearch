@@ -23,9 +23,9 @@ class Output
 	}
 
 
-	function showAmountOfGroups($amount)
+	function showAmountOfGroups($amounts)
 	{
-		echo "Groups: $amount\n";
+		echo "Groups: $amounts\n";
 	}
 
 

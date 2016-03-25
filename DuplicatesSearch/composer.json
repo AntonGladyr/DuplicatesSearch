@@ -1,0 +1,7 @@
+{
+  "autoload": {
+        "classmap":  ["BusinessLogic/", "Client/", "Controller"]
+
+
+  }
+}

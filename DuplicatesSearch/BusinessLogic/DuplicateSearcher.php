@@ -1,14 +1,10 @@
 <?php
-include "Comparator.php";
-include "Processing/Processing.php";
 
 class DuplicateSearcher
 {
 	private $myDictionary = array();
 
 	private $linksDictionary = array();
-
-	private $folderPath;
 
 	private $comparator;
 
@@ -18,19 +14,18 @@ class DuplicateSearcher
 
 	//function __construct() { }
 
-	function __construct($path)
+	function __construct()
 	{
-		$this->folderPath = $path;
 		$this->comparator = new Comparator();
 		$this->processing = new Processing();
 	}
 
 
-	function searchDuplicates()
+	function searchDuplicates($path)
 	{
 		$totalSize = 0;
 		$iterator = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($this->folderPath, RecursiveDirectoryIterator::SKIP_DOTS));
+			new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS));
 		// Without dots 
 		// . - current folder
 		// .. - previous folder
@@ -57,7 +52,7 @@ class DuplicateSearcher
 				}
 			}
 
-			$this->processing->show_status($totalSize += filesize($file), disk_total_space($this->folderPath)/4096);
+			$this->processing->show_status($totalSize += filesize($file), disk_total_space($path)/4096);
 		}
 	}
 

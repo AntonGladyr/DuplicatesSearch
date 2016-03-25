@@ -1,8 +1,10 @@
 #!/usr/bin/php
 <?php
-include "Client/Client.php";
 
-$client = new Client($argv[1]);
-$client->startSearch();
+require 'vendor/autoload.php';
+
+$controller = new Controller($argv[1]);
+
+$controller->Start();
 
 ?>

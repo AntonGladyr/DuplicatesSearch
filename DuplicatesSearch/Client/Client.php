@@ -1,9 +1,4 @@
 <?php
-include "BusinessLogic/DuplicateSearcher.php";
-include "Output.php";
-include "Client/Input.php";
-include "Client/Validator/Validator.php";
-
 
 class Client
 {
@@ -19,28 +14,35 @@ class Client
 		$this->input->setPath($path);
 	}
 
-	function startSearch()
+	function  getPath()
 	{
-			if ($this->validator->isValidate($this->input->getPath()))
-			{
-				$start_time = microtime($get_as_float=true);
+		if ($this->validator->isValidate($this->input->getPath()))
+			return $this->input->getPath();
+		else
+		{
+			$this->output->showError();
+			return null;
+		}
+	}
 
-				$duplicateSearcher = new DuplicateSearcher($this->input->getPath());
+	function displayFilteredResult($results)
+	{
+		$this->output->showDuplicates($results);
+	}
 
-				$duplicateSearcher->searchDuplicates();
+	function  displayLinks($links)
+	{
+		$this->output->showLinks($links);
+	}
 
-				$this->output->showDuplicates($duplicateSearcher->getFilteredResult());
+	function displayAmountOfGroups($amounts)
+	{
+		$this->output->showAmountOfGroups($amounts);
+	}
 
-				$this->output->showLinks($duplicateSearcher->getLinks());
-
-				$this->output->showAmountOfGroups($duplicateSearcher->getAmountOfGroups());
-
-				$time = microtime($get_as_float=true) - $start_time;
-
-				$this->output->showTime($time);
-			}
-			else
-				$this->output->showError();
+	function displayTime($time)
+	{
+		$this->output->showTime($time);
 	}
 }
 
