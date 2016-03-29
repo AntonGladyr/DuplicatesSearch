@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
 
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
-$controller = new Controller($argv[1]);
+$controller = new Controller($argv);
 
-$controller->Start();
+$controller->start();
 
 ?>

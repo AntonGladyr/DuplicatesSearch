@@ -45,14 +45,14 @@ function show_status($done, $total, $size=30)
 
         $status_bar.= " remaining: ".number_format($eta)." sec.  elapsed: ".number_format($elapsed)." sec.";
 
-        echo "$status_bar  ";
-
         flush();
 
+        return $status_bar;
+
         // when done, send a newline
-        if($done == $total) {
-            echo "\n";
-        }
+        //if($done == $total) {
+        //    echo "\n";
+        //}
 
     }
 }

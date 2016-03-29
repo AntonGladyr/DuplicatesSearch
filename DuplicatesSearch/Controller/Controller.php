@@ -6,13 +6,13 @@ class Controller
 
     private $client;
 
-    function __construct($path)
+    function __construct($argv)
     {
-        $this->client = new Client($path);
+        $this->client = new Client($argv);
         $this->duplicateSearcher = new DuplicateSearcher();
     }
 
-    public function Start()
+    public function start()
     {
         $start_time = microtime($get_as_float=true);
 
@@ -20,6 +20,8 @@ class Controller
 
         if (!is_null($path))
         {
+            $this->duplicateSearcher->setClient($this->client);
+
             $this->duplicateSearcher->searchDuplicates($path);
 
             $this->client->displayFilteredResult($this->duplicateSearcher->getFilteredResult());

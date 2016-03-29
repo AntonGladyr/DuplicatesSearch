@@ -8,22 +8,21 @@ class DuplicateSearcher
 
 	private $comparator;
 
-	private $processing;
-
 	private $counter;
 
-	//function __construct() { }
+	private $client;
 
 	function __construct()
 	{
 		$this->comparator = new Comparator();
-		$this->processing = new Processing();
 	}
 
 
 	function searchDuplicates($path)
 	{
-		$totalSize = 0;
+		if (!is_null($this->client))
+			$this->comparator->attach($this->client);
+
 		$iterator = new RecursiveIteratorIterator(
 			new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS));
 		// Without dots 
@@ -38,7 +37,7 @@ class DuplicateSearcher
 				if (in_array(filesize($file), array_keys($this->myDictionary))) { // Check filesize in dict keys
 					$added = false;    // flag
 					foreach ($this->myDictionary[filesize($file)] as $index => $group) { // Iterate groups with index
-						if ($this->comparator->Compare($file, $group[0])) { // Compare first file of group and current file
+						if ($this->comparator->compare($file, $group[0])) { // Compare first file of group and current file
 							$added = true;    // flag = true if added in group
 							array_push($this->myDictionary[filesize($file)][$index], $file);
 							break;
@@ -51,8 +50,6 @@ class DuplicateSearcher
 					$this->myDictionary[filesize($file)] = [[$file]]; // Add new filesize => groups
 				}
 			}
-
-			$this->processing->show_status($totalSize += filesize($file), disk_total_space($path)/4096);
 		}
 	}
 
@@ -83,6 +80,12 @@ class DuplicateSearcher
 	function getLinks()
 	{
 		return $this->linksDictionary;
+	}
+
+
+	function setClient($client)
+	{
+		$this->client = $client;
 	}
 }
 ?>

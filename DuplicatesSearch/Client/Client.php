@@ -1,17 +1,21 @@
 <?php
 
-class Client
+class Client implements SplObserver
 {
 	private $output;
 	private $input;
 	private $validator;
+	private $argv = array();
+	private $path;
 
-	function __construct($path)
+	function __construct($argv)
 	{
 		$this->output = new Output();
 		$this->validator = new Validator();
 		$this->input = new Input();
-		$this->input->setPath($path);
+		$this->argv = $argv;
+		$this->path = $argv[1];
+		$this->input->setPath($this->path);
 	}
 
 	function  getPath()
@@ -43,6 +47,10 @@ class Client
 	function displayTime($time)
 	{
 		$this->output->showTime($time);
+	}
+
+	public function update(\SplSubject $subject) {
+		echo $subject->getStatusBar();
 	}
 }
 
