@@ -39,5 +39,17 @@ class Output
 	{
 		echo "Incorrect path. Try again...\n";
 	}
+
+
+	function showStatusBar($status)
+	{
+		echo "$status  ";
+		flush();
+	}
+
+	function showNewLine()
+	{
+		echo "\n";
+	}
 }
 ?>
