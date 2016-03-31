@@ -12,11 +12,11 @@ class DuplicateSearcher
 
 	private $client;
 
+
 	function __construct()
 	{
 		$this->comparator = new Comparator();
 	}
-
 
 	function searchDuplicates($path)
 	{

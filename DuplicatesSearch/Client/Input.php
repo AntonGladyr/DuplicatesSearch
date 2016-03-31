@@ -4,6 +4,7 @@ class Input
 {
 	private $path;
 
+
 	function setPath($path)
 	{
 		if (empty($path))
