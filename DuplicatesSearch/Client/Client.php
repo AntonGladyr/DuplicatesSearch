@@ -8,8 +8,6 @@ class Client implements SplObserver
 
 	private $validator;
 
-	//private $processing;
-
 	private $argv = array();
 
 	private $path;
@@ -20,7 +18,6 @@ class Client implements SplObserver
 		$this->output = new Output();
 		$this->validator = new Validator();
 		$this->input = new Input();
-		//$this->processing = new Processing();
 		$this->argv = $argv;
 		$this->path = $argv[1];
 		$this->input->setPath($this->path);
@@ -59,7 +56,7 @@ class Client implements SplObserver
 
 	public function update(\SplSubject $subject) {
 		$processing = new Processing();
-		$status = $processing->calculateStatusBar($subject->getDoneBytes(), $subject->getTotalBytes());
+		$status = $processing->calculateStatusBar($subject->getDoneBytes(), $subject->getTotalBytes());  //check is method exit?
 		$this->output->showStatusBar($status);
 		if ($subject->getDoneBytes() >= $subject->getTotalBytes())
 			$this->output->showNewLine();

@@ -17,7 +17,21 @@ class Comparator implements \SplSubject
 
 			$file1 = fopen($path1, 'rb');
 			$file2 = fopen($path2, 'rb');
-			
+
+			for($i = 0; $i < 10; $i++)
+			{
+				$seek = rand(0, filesize($path1));
+				fseek($file1, $seek);
+				fseek($file2, $seek);
+				$data_file1 = fread($file1, self::BUFFER);
+				$data_file2 = fread($file2, self::BUFFER);
+				if ($data_file1 !== $data_file2)
+					return false;
+				fseek($file1, 0);
+				fseek($file2, 0);
+
+			}
+
 			while (($f1_bytes = fread($file1, self::BUFFER)) != false)
 			{
 				$f2_bytes = fread($file2, self::BUFFER);
@@ -34,6 +48,8 @@ class Comparator implements \SplSubject
 
 				$this->done += self::BUFFER;
 				$this->total = filesize($path1);
+				if ($this->done > $this->total)
+					$this->done = $this->total;
 				$this->notify();
 			}
 			
