@@ -1,5 +1,12 @@
 <?php
 
+namespace DuplicatesSearch\Client;
+
+use DuplicatesSearch\BusinessLogic\Comparator;
+use DuplicatesSearch\Client\Processing\Processing;
+use DuplicatesSearch\Client\Validator\Validator;
+use SplObserver;
+
 class Client implements SplObserver
 {
 	private $output;
@@ -19,7 +26,7 @@ class Client implements SplObserver
 		$this->validator = new Validator();
 		$this->input = new Input();
 		$this->argv = $argv;
-		$this->path = $argv[1];
+		$this->path = isset($argv[1])?$argv[1]:'./';
 		$this->input->setPath($this->path);
 	}
 
@@ -56,6 +63,7 @@ class Client implements SplObserver
 
 	public function update(\SplSubject $subject) {
 		$processing = new Processing();
+		/** @var Comparator $subject */
 		$status = $processing->calculateStatusBar($subject->getDoneBytes(), $subject->getTotalBytes());  //check is method exit?
 		$this->output->showStatusBar($status);
 		if ($subject->getDoneBytes() >= $subject->getTotalBytes())

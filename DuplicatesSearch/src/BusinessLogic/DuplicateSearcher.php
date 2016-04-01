@@ -1,5 +1,10 @@
 <?php
 
+namespace DuplicatesSearch\BusinessLogic;
+
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 class DuplicateSearcher
 {
 	private $myDictionary = array();
@@ -34,7 +39,7 @@ class DuplicateSearcher
 			if (is_link($file))
 				array_push($this->linksDictionary, $file);
 			else {
-				if (in_array(filesize($file), array_keys($this->myDictionary))) { // Check filesize in dict keys
+				if (in_array(filesize($file), array_keys($this->myDictionary))) { // Check file size in dict keys
 					$added = false;    // flag
 					foreach ($this->myDictionary[filesize($file)] as $index => $group) { // Iterate groups with index
 						if ($this->comparator->compare($file, $group[0])) { // Compare first file of group and current file
@@ -46,8 +51,8 @@ class DuplicateSearcher
 					if (!$added) {    // If not added, add new group
 						array_push($this->myDictionary[filesize($file)], [$file]);
 					}
-				} else { // If filesize not in dict keys
-					$this->myDictionary[filesize($file)] = [[$file]]; // Add new filesize => groups
+				} else { // If file size not in dict keys
+					$this->myDictionary[filesize($file)] = [[$file]]; // Add new file size => groups
 				}
 			}
 		}

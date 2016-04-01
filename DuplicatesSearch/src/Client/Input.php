@@ -1,5 +1,7 @@
 <?php
 
+namespace DuplicatesSearch\Client;
+
 class Input
 {
 	private $path;

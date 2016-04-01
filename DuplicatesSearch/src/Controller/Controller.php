@@ -1,5 +1,10 @@
 <?php
 
+namespace DuplicatesSearch\Controller;
+
+use DuplicatesSearch\BusinessLogic\DuplicateSearcher;
+use DuplicatesSearch\Client\Client;
+
 class Controller
 {
     private $duplicateSearcher;
@@ -15,12 +20,11 @@ class Controller
 
     public function start()
     {
-        $start_time = microtime($get_as_float=true);
+        $start_time = microtime($get_as_float = true);
 
         $path = $this->client->getPath();
 
-        if (!is_null($path))
-        {
+        if (!is_null($path)) {
             $this->duplicateSearcher->setClient($this->client);
 
             $this->duplicateSearcher->searchDuplicates($path);
@@ -31,7 +35,7 @@ class Controller
 
             $this->client->displayAmountOfGroups($this->duplicateSearcher->getAmountOfGroups());
 
-            $time = microtime($get_as_float=true) - $start_time;
+            $time = microtime($get_as_float = true) - $start_time;
 
             $this->client->displayTime($time);
         }

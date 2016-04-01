@@ -1,4 +1,7 @@
 <?php
+
+namespace DuplicatesSearch\Client;
+
 class Output
 {
 	function showDuplicates($results)

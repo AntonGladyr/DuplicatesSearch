@@ -1,5 +1,7 @@
 <?php
 
+namespace DuplicatesSearch\Client\Validator;
+
 class Validator
 {
     // Check path
