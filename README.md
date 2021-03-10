@@ -1,4 +1,4 @@
-# Duplicates Search
+# Duplicate Files Finder
 
 ## Description
 The purpose of the script is to find identical files in a specified directory. The result of the script execution is a list of identical files shown in the terminal.
@@ -9,3 +9,5 @@ The purpose of the script is to find identical files in a specified directory. T
 * Script has to be run without _php_ command. For example: ```$/home/user/fileComration.php```
 
 ## Usage
+
+```./main.php /directory_path/```
